@@ -39,17 +39,19 @@ def login():
     send(("PASS %s\n" % config.vbus_pass).encode('ascii'))
 
     dat = recv()
-
     return dat.startswith("+OK".encode('ascii'))
 
 
 def load_data():
+    if config.debug:
+      print("Loading Data")
     if config.connection == "lan":
         #Request Data
         send("DATA\n".encode('ascii'))
 
         dat = recv()
-
+        if config.debug:
+          print(dat)
         #Check if device is ready to send Data
         if not dat.startswith("+OK".encode('ascii')):
             return
@@ -61,6 +63,7 @@ def load_data():
         if config.debug:
             print(str(len(msgs))+" Messages, "+str(len(result))+" Resultlen")
         for msg in msgs:
+
             if config.debug: print(get_protocolversion(msg))
             if "PV1" == get_protocolversion(msg):
                 if config.debug: print(format_message_pv1(msg))
@@ -156,15 +159,23 @@ def parse_payload(msg):
          print('ParsePacket Payload '+str(len(payload)))
 
     for packet in spec.spec['packet']:
-        if packet['source'].lower() == get_source(msg).lower() and \
+        if config.debug:
+          print("packet")
+          print(packet)
+
+        source = packet['source'].lower()
+
+        if source == get_source(msg).lower() and \
                 packet['destination'].lower() == get_destination(msg).lower() and \
                 packet['command'].lower() == get_command(msg).lower():
+
             result[get_source_name(msg)] = {}
             for field in packet['field']:
-                result[get_source_name(msg)][field['name'][0]] = str(
-                    gb(payload, field['offset'], int(field['offset'])+((int(field['bitSize'])+1) / 8)) *
-                    (Decimal(field['factor']) if 'factor' in field else 1)) + \
-                    (field['unit'] if 'unit' in field and config.use_units else '')
+                if 'offset' in field:
+                  result[get_source_name(msg)][field['name'][0]] = str(
+                      gb(payload, field['offset'], int(field['offset'])+((int(field['bitSize'])+1) / 8)) *
+                      (Decimal(field['factor']) if 'factor' in field else 1)) + \
+                      (field['unit'] if 'unit' in field and config.use_units else '')
 
 
 def format_message_pv1(msg):
