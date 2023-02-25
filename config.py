@@ -22,7 +22,7 @@ expected_packets = 1
 # should json data field contain units?
 use_units = True
 
-debug = True
+debug = False
 
 # Temperatur Sensor 1 = tkol => kollekoren temperatur
 # Temperatur Sensor 2 = TSPu => Temp. Schichtenspeicher oben
@@ -31,3 +31,16 @@ debug = True
 # Temperatur Sensor 5=> ??? evtl.  "34.9 °C",
 # Temperatur Sensor 9=> ??? evtl. "26.8 °C",
 # Temperatur Sensor 11 => Temp. aussen  "9.1 °C",
+
+
+# 24.02.2023 19:02 Holzofen vor ca 1h an
+  # "DeltaSol M [Regler]": {
+  #   "Temperatur Sensor 1": "7.4 °C",
+  #   "Temperatur Sensor 2": "64.5 °C",
+
+  #   "Temperatur Sensor 4": "26.7 °C",
+  #   "Temperatur Sensor 5": "63.9 °C",
+
+  #   "Temperatur Sensor 9": "46.3 °C",
+
+  #   "Temperatur Sensor 11": "8.2 °C",
